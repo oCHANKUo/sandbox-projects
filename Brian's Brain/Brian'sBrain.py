@@ -2,8 +2,8 @@ import turtle
 import time
 import random
 
-rows = 60
-cols = 60
+rows = 50
+cols = 50
 cellSize = 5
 
 #cell states
@@ -38,7 +38,7 @@ grid = create2DArray(rows, cols)
 # Initialize random ON cells to start the simulation
 for r in range(rows):
     for c in range(cols):
-        if random.random() < 0.02:  # 1% of the grid will be ON initially. Change this parameter for fun patterns
+        if random.random() < 0.01:  # 1% of the grid will be ON initially. Change this parameter for fun patterns
             grid[r][c] = ON
 
 def drawCell(x, y, state):
