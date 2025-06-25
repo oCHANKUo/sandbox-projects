@@ -1,8 +1,10 @@
 import turtle
+import time
+import random
 
-rows = 100
-cols = 100
-cellSize = 10
+rows = 60
+cols = 60
+cellSize = 5
 
 #cell states
 OFF = 0
@@ -12,7 +14,7 @@ DYING = 2
 colors = {
     OFF: "black",
     ON: "white",
-    DYING: "reds"
+    DYING: "red"
 }
 
 
@@ -28,11 +30,16 @@ pen.hideturtle()
 pen.penup()
 pen.speed(0)
 
-def create2DArray(rows, cols):
-    return [[OFF for _ in range(cols)] for _ in range(rows)]
+def create2DArray(row1, col1):
+    return [[0 for _ in range(col1)] for _ in range(row1)]
 
 grid = create2DArray(rows, cols)
 
+# Initialize random ON cells to start the simulation
+for r in range(rows):
+    for c in range(cols):
+        if random.random() < 0.1:  # 10% of the grid will be ON initially
+            grid[r][c] = ON
 
 def drawCell(x, y, state):
     pen.goto((x - cols // 2) * cellSize, (rows // 2 - y) * cellSize)
@@ -44,7 +51,7 @@ def drawCell(x, y, state):
     pen.end_fill()
 
 
-def coutNeighbours(r, c):
+def countNeighbours(r, c):
     count = 0
     for dr in [-1, 0, 1]:
         for dc in [-1, 0, 1]:
@@ -64,8 +71,9 @@ while True:
         for c in range(cols):
             drawCell(c, r, grid[r][c])
     screen.update()
+    time.sleep(1/60)
 
-    newGrid = create2DArray()
+    newGrid = create2DArray(rows, cols)
     for r in range(rows):
         for c in range(cols):
             state = grid[r][c]
@@ -73,8 +81,8 @@ while True:
                 if countNeighbours(r, c) == 2:
                     newGrid[r][c] = ON # set state to ON
             elif state == ON:
-                newGrid[r][c] = DYING
-            elif state == OFF:
+                newGrid[r][c] =  DYING
+            elif state == DYING:
                 newGrid[r][c] = OFF
     grid = newGrid
 
