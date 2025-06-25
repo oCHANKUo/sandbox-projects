@@ -38,7 +38,7 @@ grid = create2DArray(rows, cols)
 # Initialize random ON cells to start the simulation
 for r in range(rows):
     for c in range(cols):
-        if random.random() < 0.1:  # 10% of the grid will be ON initially
+        if random.random() < 0.01:  # 1% of the grid will be ON initially
             grid[r][c] = ON
 
 def drawCell(x, y, state):
@@ -66,25 +66,25 @@ def countNeighbours(r, c):
 
 # main loop
 while True:
-    pen.clear()
-    for r in range(rows):
-        for c in range(cols):
-            drawCell(c, r, grid[r][c])
-    screen.update()
     time.sleep(1/60)
-
+    
     newGrid = create2DArray(rows, cols)
     for r in range(rows):
         for c in range(cols):
             state = grid[r][c]
             if state == OFF:
                 if countNeighbours(r, c) == 2:
-                    newGrid[r][c] = ON # set state to ON
+                    newGrid[r][c] = ON
             elif state == ON:
-                newGrid[r][c] =  DYING
+                newGrid[r][c] = DYING
             elif state == DYING:
                 newGrid[r][c] = OFF
-    grid = newGrid
 
-#Brain()
-turtle.done() # keeps the window up
+    # Only draw cells that changed
+    for r in range(rows):
+        for c in range(cols):
+            if grid[r][c] != newGrid[r][c]:
+                drawCell(c, r, newGrid[r][c])
+
+    grid = newGrid
+    screen.update()
